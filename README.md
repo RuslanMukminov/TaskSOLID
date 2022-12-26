@@ -8,8 +8,9 @@
 
 Также добавлены интерфейсы (принцип "Dependency Inversion Principle"),
 также это позволит расширять функиональность, добавляя новые классы реализаций("Open-closed principle"):
-- Store: его раелизует класс FoodStore, в котором хранится ассортимент продуктов;
-- ShopCart: его раелизует класс Purchase, который обрабатывает список покупок;
+- Store: его реализует класс FoodStore, в котором хранится ассортимент продуктов;
+- ShopCart: его реализует класс ShopCartImpl, который хранит корзину покупок;
+- Purchase: его реализует класс PurchaseImpl для покупки одного товара;
 
 ### Далее код, который нужно исправить, с комментариями нарушений и исправлений:
 
@@ -50,8 +51,8 @@ public class Main {
             purchase.addPurchase(product, count);
         }
         
-        // вывод списка покупок и итоговой суммы переместил в метод printPurchase()
-        // данный функционал логичнее использовать в классе Purchase
+        // вывод списка покупок и итоговой суммы переместил в метод printAll()
+        // данный функционал логичнее использовать в классе ShopCart
         long sum = purchase.sum(products);
         System.out.println("ИТОГО: " + sum);
     }
@@ -61,6 +62,9 @@ public class Main {
 ```java
 import java.util.Map;
 
+// Объекты класса Purchase являются и корзиной, и покупкой одного товара
+// (принцип Single responsibility principle) 
+// класс разделен на два класса: ShopCartImpl и PurchaseImpl
 public class Purchase {
     protected String title;
     protected int count;
@@ -93,7 +97,7 @@ public class Purchase {
 
     // в этом методе происходит печать списка покупок и посчет итоговой суммы, которая возвращается
     // т.е. логику можно объединить в печать покупок с потраченной суммой
-    // метод преобразован в printPurchase() который ничего не возвращает
+    // метод преобразован в printAll() который ничего не возвращает
     public long sum(Map<String, Integer> prices) {
         long sum = 0;
         System.out.println("КОРЗИНА:");
